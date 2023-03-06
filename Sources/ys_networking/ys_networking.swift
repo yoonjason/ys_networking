@@ -14,13 +14,18 @@ enum NetworkError: Error {
     case invalid
 }
 
-final class NetworkManager {
+public class NetworkManager {
 
     let shared = NetworkManager()
 
     let session = URLSession.shared
+    
+    public func test() {
+        print("pubic으로 테스트 합니다~")
+    }
+    
 
-    func fetchData<T:Codable>(
+    public func fetchData<T:Codable>(
         for url: String,
         dataType: T.Type,
         completion: @escaping (Result<T, Error>) -> Void
