@@ -16,7 +16,7 @@ enum NetworkError: Error {
 
 public class NetworkManager {
 
-    public let shared = NetworkManager()
+    public static let shared = NetworkManager()
 
     let session = URLSession.shared
     
