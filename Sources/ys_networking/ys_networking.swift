@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 public struct ys_networking {
     public private(set) var text = "Hello, World!"
@@ -19,11 +20,12 @@ public class NetworkManager {
     public static let shared = NetworkManager()
 
     let session = URLSession.shared
-    
+
+
     public func test() {
         print("pubic으로 테스트 합니다~")
     }
-    
+
 
     public func fetchData<T:Codable>(
         for url: String,
@@ -56,5 +58,52 @@ public class NetworkManager {
         }
         dataTask.resume()
     }
+
+    func fetechData(withUrlString urlString: String, completion: @escaping (UIImage) -> Void) {
+
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let weakSelf = self else { return }
+
+            let cacheKey = NSString(string: urlString)
+
+            if let chacheImage = ImageCachedManager.shared.object(forKey: cacheKey) {
+                completion(chacheImage)
+            }
+
+            guard let url = URL(string: urlString) else { return }
+            let dataTask = weakSelf.session.dataTask(with: url) { (data, response, error) in
+                guard error == nil else {
+                    DispatchQueue.main.async { [weak self] in
+                        completion(UIImage())
+                    }
+                    return
+                }
+
+                DispatchQueue.main.async { [weak self] in
+                    if let data = data, let image = UIImage(data: data) {
+                        ImageCachedManager.shared.setObject(image, forKey: cacheKey)
+                        completion(image)
+                    }
+                }
+            }
+                .resume()
+
+        }
+
+
+
+    }
+
+    public func fetchImage(withImageUrl urlString: String) -> UIImage {
+        let cacheKey = NSString(string: urlString)
+        if let cachedImage = ImageCachedManager.shared.object(forKey: cacheKey) {
+            return cachedImage
+        }
+
+
+
+        return UIImage()
+    }
+
 
 }
