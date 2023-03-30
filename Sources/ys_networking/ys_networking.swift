@@ -23,7 +23,7 @@ public class NetworkManager {
 
 
     public func test() {
-        print("pubic으로 테스트 합니다~")
+        print("pubic")
     }
 
 
@@ -86,7 +86,8 @@ public class NetworkManager {
                     }
                 }
             }
-                .resume()
+            
+            dataTask.resume()
 
         }
 
