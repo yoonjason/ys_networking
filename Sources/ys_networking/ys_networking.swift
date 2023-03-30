@@ -59,7 +59,7 @@ public class NetworkManager {
         dataTask.resume()
     }
 
-    func fetechData(withUrlString urlString: String, completion: @escaping (UIImage) -> Void) {
+    public func fetchData(withUrlString urlString: String, completion: @escaping (UIImage) -> Void) {
 
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let weakSelf = self else { return }
